@@ -120,8 +120,7 @@
             justify-content: center;
             overflow: hidden;
             background: linear-gradient(rgba(10, 60, 82, 0.7), rgba(74, 155, 181, 0.7)), 
-                          url('img/cityscape-corresur.jpg') center/cover;
-                      /*  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="cityscape" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><rect width="200" height="200" fill="%23034c65"/><rect x="20" y="80" width="30" height="120" fill="%23ffa94d" opacity="0.3"/><rect x="70" y="50" width="25" height="150" fill="%234a9bb5" opacity="0.4"/><rect x="120" y="90" width="35" height="110" fill="%23ffa94d" opacity="0.2"/><rect x="170" y="60" width="20" height="140" fill="%234a9bb5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23cityscape)"/></svg>') center/cover;*/
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="cityscape" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><rect width="200" height="200" fill="%23034c65"/><rect x="20" y="80" width="30" height="120" fill="%23ffa94d" opacity="0.3"/><rect x="70" y="50" width="25" height="150" fill="%234a9bb5" opacity="0.4"/><rect x="120" y="90" width="35" height="110" fill="%23ffa94d" opacity="0.2"/><rect x="170" y="60" width="20" height="140" fill="%234a9bb5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23cityscape)"/></svg>') center/cover;
             background-attachment: fixed;
         }
 
@@ -176,11 +175,34 @@
             }
         }
 
-        /* ===== ROADMAP VERTICAL ===== */
+        /* ===== ROADMAP VERTICAL CON PARALLAX ===== */
         .roadmap-container {
             position: relative;
-            background: linear-gradient(to bottom, var(--white), var(--light-blue));
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(232, 244, 248, 0.95)),                       
+                         url('img/backheroheader.jpg') center/cover;
+                    /*   url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="techpattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="%23f8fafc"/><circle cx="20" cy="20" r="2" fill="%234a9bb5" opacity="0.3"/><circle cx="80" cy="30" r="1.5" fill="%23ffa94d" opacity="0.4"/><circle cx="50" cy="70" r="2.5" fill="%230a3c52" opacity="0.2"/><rect x="10" y="40" width="20" height="1" fill="%234a9bb5" opacity="0.3"/><rect x="60" y="60" width="15" height="1" fill="%23ffa94d" opacity="0.4"/><rect x="30" y="80" width="25" height="1" fill="%230a3c52" opacity="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(%23techpattern)"/></svg>') center/cover; */
+            background-attachment: fixed;
             padding: 80px 0;
+            overflow: hidden;
+        }
+
+        .roadmap-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(10, 60, 82, 0.05) 0%, 
+                rgba(74, 155, 181, 0.03) 50%, 
+                rgba(255, 169, 77, 0.05) 100%);
+            z-index: 1;
+        }
+
+        .roadmap-header, .timeline {
+            position: relative;
+            z-index: 2;
         }
 
         .roadmap-header {
@@ -390,12 +412,35 @@
             box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
         }
 
-        /* ===== USER STORIES SECTION ===== */
+        /* ===== USER STORIES SECTION CON PARALLAX ===== */
         .user-stories-section {
-            background: var(--primary-blue);
+            background: linear-gradient(rgba(10, 60, 82, 0.85), rgba(74, 155, 181, 0.9)), 
+                   url('img/backgrounParallax.jpg') center/cover;     
+                /* url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="networkpattern" x="0" y="0" width="150" height="150" patternUnits="userSpaceOnUse"><rect width="150" height="150" fill="%230a3c52"/><circle cx="25" cy="25" r="3" fill="%23ffa94d" opacity="0.6"/><circle cx="125" cy="25" r="2" fill="%234a9bb5" opacity="0.5"/><circle cx="75" cy="75" r="4" fill="%23ffa94d" opacity="0.4"/><circle cx="25" cy="125" r="2.5" fill="%234a9bb5" opacity="0.6"/><circle cx="125" cy="125" r="3.5" fill="%23ffa94d" opacity="0.5"/><line x1="25" y1="25" x2="75" y2="75" stroke="%234a9bb5" stroke-width="1" opacity="0.3"/><line x1="75" y1="75" x2="125" y2="25" stroke="%23ffa94d" stroke-width="1" opacity="0.3"/><line x1="75" y1="75" x2="25" y2="125" stroke="%234a9bb5" stroke-width="1" opacity="0.3"/><line x1="75" y1="75" x2="125" y2="125" stroke="%23ffa94d" stroke-width="1" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23networkpattern)"/></svg>') center/cover;*/
+            background-attachment: fixed;
             color: var(--white);
             padding: 80px 0;
             position: relative;
+            overflow: hidden;
+        }
+
+        .user-stories-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(10, 60, 82, 0.1) 0%, 
+                rgba(255, 169, 77, 0.05) 50%, 
+                rgba(74, 155, 181, 0.1) 100%);
+            z-index: 1;
+        }
+
+        .user-stories-container {
+            position: relative;
+            z-index: 2;
         }
 
         .user-stories-container {
@@ -503,10 +548,34 @@
             color: var(--secondary-orange);
         }
 
-        /* ===== ASSESSMENT DETALLADO ===== */
+        /* ===== ASSESSMENT DETALLADO CON PARALLAX ===== */
         .assessment-section {
-            background: var(--white);
+            background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(232, 244, 248, 0.9)), 
+                        url('img/cityscape-corresur.jpg') center/cover;                
+                /*      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="datapattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse"><rect width="120" height="120" fill="%23fafbfc"/><rect x="10" y="10" width="8" height="40" fill="%234a9bb5" opacity="0.2"/><rect x="25" y="20" width="8" height="30" fill="%23ffa94d" opacity="0.3"/><rect x="40" y="15" width="8" height="35" fill="%230a3c52" opacity="0.2"/><rect x="55" y="25" width="8" height="25" fill="%234a9bb5" opacity="0.3"/><rect x="70" y="18" width="8" height="32" fill="%23ffa94d" opacity="0.2"/><rect x="85" y="22" width="8" height="28" fill="%230a3c52" opacity="0.3"/><circle cx="100" cy="100" r="8" fill="%234a9bb5" opacity="0.1"/><circle cx="20" cy="100" r="6" fill="%23ffa94d" opacity="0.15"/><circle cx="60" cy="90" r="7" fill="%230a3c52" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23datapattern)"/></svg>') center/cover;*/
+            background-attachment: fixed;
             padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(74, 155, 181, 0.03) 0%, 
+                rgba(255, 169, 77, 0.02) 50%, 
+                rgba(10, 60, 82, 0.04) 100%);
+            z-index: 1;
+        }
+
+        .assessment-container {
+            position: relative;
+            z-index: 2;
         }
 
         .assessment-container {
@@ -597,6 +666,14 @@
                 font-size: 1.1rem;
             }
             
+            /* Desactivar parallax en móviles para mejor rendimiento */
+            .hero-parallax,
+            .roadmap-container,
+            .user-stories-section,
+            .assessment-section {
+                background-attachment: scroll !important;
+            }
+            
             .timeline::before {
                 left: 30px;
             }
@@ -624,6 +701,26 @@
             .stories-grid, .assessment-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+        }
+
+        /* ===== OPTIMIZACIÓN PARA PARALLAX ===== */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-parallax,
+            .roadmap-container,
+            .user-stories-section,
+            .assessment-section {
+                background-attachment: scroll !important;
+                transform: none !important;
+            }
+        }
+
+        /* Mejor rendimiento en pantallas pequeñas */
+        @media (max-width: 1024px) {
+            .roadmap-container,
+            .user-stories-section,
+            .assessment-section {
+                background-attachment: scroll;
             }
         }
 
@@ -1109,18 +1206,45 @@
             });
         }
 
-        // ===== PARALLAX EFFECT ===== 
+        // ===== PARALLAX EFFECT MEJORADO ===== 
         function parallaxEffect() {
-            const hero = document.querySelector('.hero-parallax');
             const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
             
+            // Hero parallax (más pronunciado)
+            const hero = document.querySelector('.hero-parallax');
             if (hero) {
-                hero.style.transform = `translateY(${rate}px)`;
+                const heroRate = scrolled * -0.5;
+                hero.style.transform = `translateY(${heroRate}px)`;
+            }
+            
+            // Roadmap parallax (sutil)
+            const roadmap = document.querySelector('.roadmap-container');
+            if (roadmap) {
+                const roadmapRate = scrolled * -0.2;
+                roadmap.style.backgroundPosition = `center ${roadmapRate}px`;
+            }
+            
+            // User Stories parallax (medio)
+            const userStories = document.querySelector('.user-stories-section');
+            if (userStories) {
+                const storiesRate = scrolled * -0.3;
+                userStories.style.backgroundPosition = `center ${storiesRate}px`;
+            }
+            
+            // Assessment parallax (muy sutil)
+            const assessment = document.querySelector('.assessment-section');
+            if (assessment) {
+                const assessmentRate = scrolled * -0.1;
+                assessment.style.backgroundPosition = `center ${assessmentRate}px`;
             }
         }
 
-        window.addEventListener('scroll', parallaxEffect);
+        window.addEventListener('scroll', () => {
+            // Solo aplicar parallax si el usuario no prefiere movimiento reducido
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                parallaxEffect();
+            }
+        });
 
         // ===== SMOOTH SCROLL ===== 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
