@@ -21,13 +21,40 @@
     <div class="scroll-indicator" id="scrollIndicator"></div>
     
     <nav class="nav-menu">
-        <a href="#overview">📋 Overview</a>
-        <a href="#goals">🎯 Objetivos</a>
-        <a href="#specs">🔧 Técnico</a>
-        <a href="#use-cases">📝 Casos de Uso</a>
-        <a href="#milestones">🎯 Milestones</a>
-        <a href="#guarantees">✅ Garantías</a>
-        <button class="pdf-button" onclick="downloadPDF()">📄 Descargar PDF</button>
+        <!-- Navegación Desktop -->
+        <div class="nav-desktop">
+            <a href="#overview">📋 Overview</a>
+            <a href="#goals">🎯 Objetivos</a>
+            <a href="#specs">🔧 Técnico</a>
+            <a href="#use-cases">📝 Casos de Uso</a>
+            <a href="#milestones">🎯 Milestones</a>
+            <a href="#guarantees">✅ Garantías</a>
+            <button class="user-stories-button" onclick="navigateToUserStories()">
+                📖 User Stories & Roadmap
+            </button>
+            <button class="pdf-button" onclick="downloadPDF()">📄 Descargar PDF</button>
+        </div>
+        
+        <!-- Navegación Mobile -->
+        <div class="nav-mobile">
+            <button class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-mobile-menu" id="mobileMenu">
+                <a href="#overview" onclick="closeMobileMenu()">📋 Overview</a>
+                <a href="#goals" onclick="closeMobileMenu()">🎯 Objetivos</a>
+                <a href="#specs" onclick="closeMobileMenu()">🔧 Técnico</a>
+                <a href="#use-cases" onclick="closeMobileMenu()">📝 Casos de Uso</a>
+                <a href="#milestones" onclick="closeMobileMenu()">🎯 Milestones</a>
+                <a href="#guarantees" onclick="closeMobileMenu()">✅ Garantías</a>
+                <button class="user-stories-button" onclick="navigateToUserStories()">
+                    📖 User Stories
+                </button>
+                <button class="pdf-button" onclick="downloadPDF()">📄 PDF</button>
+            </div>
+        </div>
     </nav>
     
     <div class="container" id="main-content">
