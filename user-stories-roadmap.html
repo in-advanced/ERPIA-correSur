@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORRESUR - User Stories & Roadmap</title>
+    <meta name="description" content="Roadmap detallado y user stories para el desarrollo del ERP+IA de CORRESUR">
+    
+    <style>
+        :root {
+            --primary-blue: #0a3c52;
+            --secondary-orange: #ffa94d;
+            --accent-teal: #4a9bb5;
+            --white: #ffffff;
+            --light-blue: #e8f4f8;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --success-green: #52b788;
+            --warning-orange: #f39c12;
+            --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER SEMI-TRANSPARENTE ===== */
+        .floating-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 60, 82, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-text {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .logo-subtitle {
+            color: var(--secondary-orange);
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .back-button {
+            background: var(--secondary-orange);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #e88a1a;
+            transform: scale(1.05);
+        }
+
+        /* ===== HERO SECTION CON PARALLAX ===== */
+        .hero-parallax {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(rgba(10, 60, 82, 0.7), rgba(74, 155, 181, 0.7)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="cityscape" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><rect width="200" height="200" fill="%23034c65"/><rect x="20" y="80" width="30" height="120" fill="%23ffa94d" opacity="0.3"/><rect x="70" y="50" width="25" height="150" fill="%234a9bb5" opacity="0.4"/><rect x="120" y="90" width="35" height="110" fill="%23ffa94d" opacity="0.2"/><rect x="170" y="60" width="20" height="140" fill="%234a9bb5" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23cityscape)"/></svg>') center/cover;
+            background-attachment: fixed;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--white);
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero-badge {
+            background: rgba(255, 169, 77, 0.9);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== ROADMAP VERTICAL ===== */
+        .roadmap-container {
+            position: relative;
+            background: linear-gradient(to bottom, var(--white), var(--light-blue));
+            padding: 80px 0;
+        }
+
+        .roadmap-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px auto;
+            padding: 0 20px;
+        }
+
+        .roadmap-title {
+            font-size: 2.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .roadmap-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--secondary-orange), var(--accent-teal));
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+            margin-right: auto;
+            padding-right: 60px;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -15px;
+            left: auto;
+            border-color: transparent transparent transparent var(--white);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+            margin-right: 0;
+            padding-left: 60px;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -15px;
+            border-color: transparent var(--white) transparent transparent;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary-orange);
+            border: 4px solid var(--white);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(255, 169, 77, 0.3);
+        }
+
+        .timeline-content {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(10, 60, 82, 0.1);
+            width: 45%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(10, 60, 82, 0.15);
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            width: 0;
+            height: 0;
+            border: 15px solid;
+            border-color: transparent var(--white) transparent transparent;
+        }
+
+        .phase-number {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .phase-duration {
+            color: var(--secondary-orange);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .phase-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .phase-details {
+            background: var(--light-blue);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .phase-details h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .phase-details ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .phase-details li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .phase-details li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success-green);
+            font-weight: bold;
+        }
+
+        /* ===== FASE ACTUAL EXPANDIDA ===== */
+        .current-phase {
+            border: 3px solid var(--warning-orange);
+            background: linear-gradient(135deg, var(--white) 0%, #fff9f0 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .current-phase::after {
+            content: "🔥 FASE ACTUAL";
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: var(--warning-orange);
+            color: var(--white);
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 0 0 0 15px;
+        }
+
+        .current-phase .timeline-marker {
+            background: var(--warning-orange);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+        }
+
+        /* ===== USER STORIES SECTION ===== */
+        .user-stories-section {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .user-stories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .stories-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .stories-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .story-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .story-icon {
+            font-size: 2rem;
+            background: var(--secondary-orange);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .story-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .story-role {
+            color: var(--secondary-orange);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .story-want {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .story-so {
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .story-acceptance {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary-orange);
+        }
+
+        .story-acceptance h5 {
+            margin-bottom: 10px;
+            color: var(--secondary-orange);
+        }
+
+        .story-acceptance ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .story-acceptance li {
+            padding: 3px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .story-acceptance li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-orange);
+        }
+
+        /* ===== ASSESSMENT DETALLADO ===== */
+        .assessment-section {
+            background: var(--white);
+            padding: 80px 0;
+        }
+
+        .assessment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .assessment-title {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .assessment-card {
+            background: var(--light-blue);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid var(--accent-teal);
+            transition: all 0.3s ease;
+        }
+
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(10, 60, 82, 0.15);
+        }
+
+        .assessment-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .assessment-card ul {
+            list-style: none;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .assessment-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .assessment-card li::before {
+            content: "🔍";
+            position: absolute;
+            left: 0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .floating-header {
+                padding: 10px 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                padding: 0 15px;
+            }
+            
+            .header-nav {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 70px;
+                margin-right: 0;
+                padding-left: 30px;
+                padding-right: 30px;
+                text-align: left;
+                width: calc(100% - 70px);
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content::before,
+            .timeline-item:nth-child(even) .timeline-content::before {
+                left: -15px;
+                border-color: transparent var(--white) transparent transparent;
+            }
+            
+            .timeline-marker {
+                left: 30px;
+            }
+            
+            .stories-grid, .assessment-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes pulse {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        /* ===== SCROLL INDICATOR ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary-orange), var(--accent-teal));
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Header Semi-transparente -->
+    <header class="floating-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div>
+                    <div class="logo-text">CORRESUR</div>
+                    <div class="logo-subtitle">User Stories & Roadmap</div>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="#roadmap" class="nav-link">📍 Roadmap</a>
+                <a href="#user-stories" class="nav-link">📖 User Stories</a>
+                <a href="#assessment" class="nav-link">🔍 Assessment</a>
+                <button class="back-button" onclick="goBack()">← Volver a Propuesta</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section con Parallax -->
+    <section class="hero-parallax">
+        <div class="hero-content">
+            <h1 class="hero-title">Roadmap de Transformación Digital</h1>
+            <p class="hero-subtitle">De la visión a la realidad: 12 semanas para revolucionar CORRESUR</p>
+            <div class="hero-badges">
+                <span class="hero-badge">🎯 7 Fases Definidas</span>
+                <span class="hero-badge">📊 Assessment Detallado</span>
+                <span class="hero-badge">🚀 Entregables Claros</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Vertical -->
+    <section id="roadmap" class="roadmap-container">
+        <div class="roadmap-header">
+            <h2 class="roadmap-title">Roadmap Detallado del Proyecto</h2>
+            <p class="roadmap-description">
+                Cada fase del proyecto está diseñada para entregar valor incremental y construir 
+                sobre los logros anteriores, asegurando un progreso constante hacia la transformación digital completa.
+            </p>
+        </div>
+
+        <div class="timeline">
+            <!-- Fase 1: Planificación -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 1</span>
+                    <h3 class="phase-title">Planificación & Setup</h3>
+                    <div class="phase-duration">📅 Semanas 1-2</div>
+                    <p class="phase-description">
+                        Establecimiento de la infraestructura base y definición de los fundamentos del proyecto.
+                    </p>
+                    <div class="phase-details">
+                        <h4>🎯 Entregables Clave:</h4>
+                        <ul>
+                            <li>Infraestructura AWS configurada</li>
+                            <li>Repositorios de código inicializados</li>
+                            <li>Equipos de desarrollo asignados</li>
+                            <li>Plan de trabajo detallado validado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 2: Assessment (ACTUAL) -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content current-phase">
+                    <span class="phase-number">FASE 2</span>
+                    <h3 class="phase-title">Assessment & Análisis de Procesos</h3>
+                    <div class="phase-duration">📅 Semanas 4-6 (ACTUAL)</div>
+                    <p class="phase-description">
+                        <strong>Análisis profundo de los procesos actuales de CORRESUR para identificar 
+                        las mejores oportunidades de automatización con IA.</strong>
+                    </p>
+                    <div class="phase-details">
+                        <h4>🔍 Metodología de Assessment:</h4>
+                        <ul>
+                            <li>Entrevistas con Subject Matter Experts (SMEs)</li>
+                            <li>Process Shadowing para observar workflows reales</li>
+                            <li>Auditoría de datos y sistemas existentes</li>
+                            <li>Matriz de priorización: Impacto vs Viabilidad</li>
+                            <li>Canvas de casos de uso detallados</li>
+                        </ul>
+                        
+                        <h4 style="margin-top: 20px;">📊 Resultados Esperados:</h4>
+                        <ul>
+                            <li>3-5 procesos priorizados para automatización</li>
+                            <li>Roadmap técnico de implementación</li>
+                            <li>Estimaciones de ROI por caso de uso</li>
+                            <li>Plan detallado para Sprints 1 y 2</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 3: Desarrollo Sprint 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 3</span>
+                    <h3 class="phase-title">Desarrollo IA - Sprint 1</h3>
+                    <div class="phase-duration">📅 Semanas 7-9</div>
+                    <p class="phase-description">
+                        Desarrollo del primer agente de IA basado en los resultados del assessment.
+                    </p>
+                    <div class="phase-details">
+                        <h4>🚀 Entregables:</h4>
+                        <ul>
+                            <li>Agente IA especializado funcionando</li>
+                            <li>Integración con sistemas existentes</li>
+                            <li>Interface de usuario intuitiva</li>
+                            <li>Testing y validación con usuarios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 4: ERP Core -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 4</span>
+                    <h3 class="phase-title">ERP Core - Contabilidad & RRHH</h3>
+                    <div class="phase-duration">📅 Semanas 10-11</div>
+                    <p class="phase-description">
+                        Implementación de los módulos centrales del ERP con integración IA completa.
+                    </p>
+                    <div class="phase-details">
+                        <h4>💼 Módulos Principales:</h4>
+                        <ul>
+                            <li>Contabilidad con IA de conciliación</li>
+                            <li>RRHH con cálculo automático de planillas</li>
+                            <li>Tesorería con predicción de flujo de caja</li>
+                            <li>Reportería ejecutiva con insights IA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 5: Desarrollo Sprint 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 5</span>
+                    <h3 class="phase-title">Desarrollo IA - Sprint 2</h3>
+                    <div class="phase-duration">📅 Semanas 12-14</div>
+                    <p class="phase-description">
+                        Segundo agente IA con capacidades avanzadas y multicanal.
+                    </p>
+                    <div class="phase-details">
+                        <h4>🤖 Capacidades Avanzadas:</h4>
+                        <ul>
+                            <li>Procesamiento de voz y texto</li>
+                            <li>Integración WhatsApp Business</li>
+                            <li>IA predictiva para ventas</li>
+                            <li>Análisis de documentos con OCR</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 6: Integración Completa -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 6</span>
+                    <h3 class="phase-title">Integración & Business Intelligence</h3>
+                    <div class="phase-duration">📅 Semanas 15-16</div>
+                    <p class="phase-description">
+                        Unificación de todos los sistemas y desarrollo de capacidades de BI avanzado.
+                    </p>
+                    <div class="phase-details">
+                        <h4>🔗 Integraciones:</h4>
+                        <ul>
+                            <li>Conectores CRM existentes</li>
+                            <li>APIs bancarias bolivianas</li>
+                            <li>Dashboards ejecutivos en tiempo real</li>
+                            <li>Sistema de gestión documental CITES</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fase 7: Go-Live -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="phase-number">FASE 7</span>
+                    <h3 class="phase-title">Go-Live & Soporte</h3>
+                    <div class="phase-duration">📅 Semanas 17-18</div>
+                    <p class="phase-description">
+                        Puesta en producción completa con capacitación y soporte extendido.
+                    </p>
+                    <div class="phase-details">
+                        <h4>🎯 Actividades Finales:</h4>
+                        <ul>
+                            <li>Migración de datos y puesta en producción</li>
+                            <li>Capacitación completa de usuarios</li>
+                            <li>Documentación técnica y de usuario</li>
+                            <li>3 meses de soporte post go-live</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Stories Section -->
+    <section id="user-stories" class="user-stories-section">
+        <div class="user-stories-container">
+            <div class="stories-header">
+                <h2 class="stories-title">User Stories Detalladas</h2>
+                <p>Historias de usuario que guían el desarrollo de cada funcionalidad del sistema</p>
+            </div>
+
+            <div class="stories-grid">
+                <!-- Story 1: Gerente General -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">👨‍💼</div>
+                        <div class="story-title">Visión Ejecutiva 360°</div>
+                    </div>
+                    <div class="story-role">Como Gerente General</div>
+                    <div class="story-want">Quiero tener una vista consolidada de toda la operación en tiempo real</div>
+                    <div class="story-so">Para tomar decisiones estratégicas basadas en datos precisos y actualizados</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Dashboard ejecutivo con KPIs principales</li>
+                            <li>Reportes automáticos por voz</li>
+                            <li>Alertas de anomalías en tiempo real</li>
+                            <li>Acceso móvil completo</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Story 2: Agente de Seguros -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">👨‍💻</div>
+                        <div class="story-title">Asistente IA Personal</div>
+                    </div>
+                    <div class="story-role">Como Agente de Seguros</div>
+                    <div class="story-want">Quiero un asistente IA que me ayude con consultas de clientes y normativas</div>
+                    <div class="story-so">Para brindar respuestas precisas e inmediatas a mis clientes</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Consultas de pólizas por voz o texto</li>
+                            <li>Conocimiento de Ley de Seguros Bolivia</li>
+                            <li>Integración con WhatsApp Business</li>
+                            <li>Historial de interacciones</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Story 3: Contador -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">🧮</div>
+                        <div class="story-title">Contabilidad Automatizada</div>
+                    </div>
+                    <div class="story-role">Como Contador</div>
+                    <div class="story-want">Quiero que el sistema concilie automáticamente las cuentas bancarias</div>
+                    <div class="story-so">Para eliminar el trabajo manual y reducir errores de conciliación</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Conciliación automática diaria</li>
+                            <li>Detección de discrepancias</li>
+                            <li>Reportes contables automatizados</li>
+                            <li>Asientos contables inteligentes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Story 4: Cliente -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">👤</div>
+                        <div class="story-title">Autoservicio 24/7</div>
+                    </div>
+                    <div class="story-role">Como Cliente de CORRESUR</div>
+                    <div class="story-want">Quiero consultar mis pólizas y reportar siniestros en cualquier momento</div>
+                    <div class="story-so">Para tener control total sobre mis seguros sin depender de horarios</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Portal web responsivo</li>
+                            <li>Chat bot inteligente</li>
+                            <li>Notificaciones automáticas</li>
+                            <li>Reporte de siniestros por WhatsApp</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Story 5: Ajustador -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">🔍</div>
+                        <div class="story-title">Gestión Inteligente de Siniestros</div>
+                    </div>
+                    <div class="story-role">Como Ajustador de Siniestros</div>
+                    <div class="story-want">Quiero que el sistema clasifique y asigne automáticamente los casos</div>
+                    <div class="story-so">Para enfocarme en la evaluación técnica en lugar de tareas administrativas</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Clasificación automática por gravedad</li>
+                            <li>Asignación inteligente de casos</li>
+                            <li>OCR para documentos</li>
+                            <li>Seguimiento automatizado</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Story 6: RRHH -->
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">👥</div>
+                        <div class="story-title">Gestión de Personal Eficiente</div>
+                    </div>
+                    <div class="story-role">Como Responsable de RRHH</div>
+                    <div class="story-want">Quiero automatizar el cálculo de planillas y beneficios sociales</div>
+                    <div class="story-so">Para cumplir con las normativas laborales sin errores manuales</div>
+                    <div class="story-acceptance">
+                        <h5>Criterios de Aceptación:</h5>
+                        <ul>
+                            <li>Cálculo automático de planillas</li>
+                            <li>Reportes para AFP y CNS</li>
+                            <li>Control de asistencia</li>
+                            <li>Portal del empleado</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Detallado -->
+    <section id="assessment" class="assessment-section">
+        <div class="assessment-container">
+            <div class="assessment-header">
+                <h2 class="assessment-title">Assessment Metodológico Detallado</h2>
+                <p>Proceso estructurado para identificar las mejores oportunidades de automatización con IA</p>
+            </div>
+
+            <div class="assessment-grid">
+                <div class="assessment-card">
+                    <h4>🎯 Semana 4: Kick-off y Discovery</h4>
+                    <ul>
+                        <li>Reunión de alineación con stakeholders</li>
+                        <li>Identificación de Subject Matter Experts (SMEs)</li>
+                        <li>Mapeo de procesos de alto nivel</li>
+                        <li>Process Shadowing con usuarios reales</li>
+                        <li>Documentación de pain points actuales</li>
+                    </ul>
+                </div>
+
+                <div class="assessment-card">
+                    <h4>📊 Semana 5: Auditoría de Datos</h4>
+                    <ul>
+                        <li>Inventario de fuentes de datos existentes</li>
+                        <li>Evaluación de calidad y disponibilidad</li>
+                        <li>Identificación de APIs y conectores</li>
+                        <li>Análisis de viabilidad técnica por proceso</li>
+                        <li>Canvas de casos de uso detallados</li>
+                    </ul>
+                </div>
+
+                <div class="assessment-card">
+                    <h4>🎯 Semana 6: Priorización y Roadmap</h4>
+                    <ul>
+                        <li>Matriz de impacto vs complejidad</li>
+                        <li>Workshop de priorización con decisores</li>
+                        <li>Selección de casos de uso para Sprints 1 y 2</li>
+                        <li>Estimación de ROI por automatización</li>
+                        <li>Definición del roadmap técnico</li>
+                    </ul>
+                </div>
+
+                <div class="assessment-card">
+                    <h4>🔍 Metodología Process Shadowing</h4>
+                    <ul>
+                        <li>Observación directa de workflows reales</li>
+                        <li>Identificación de tareas repetitivas</li>
+                        <li>Medición de tiempos por actividad</li>
+                        <li>Documentación de reglas de negocio implícitas</li>
+                        <li>Captura de excepciones y casos edge</li>
+                    </ul>
+                </div>
+
+                <div class="assessment-card">
+                    <h4>📋 Canvas de Casos de Uso</h4>
+                    <ul>
+                        <li>Descripción del proceso actual</li>
+                        <li>Propuesta de solución con IA</li>
+                        <li>Datos requeridos y disponibles</li>
+                        <li>Estimación de impacto cuantificable</li>
+                        <li>Riesgos técnicos y de adopción</li>
+                    </ul>
+                </div>
+
+                <div class="assessment-card">
+                    <h4>⚡ Criterios de Éxito</h4>
+                    <ul>
+                        <li>3-5 procesos claramente priorizados</li>
+                        <li>ROI estimado > 300% en 18 meses</li>
+                        <li>Viabilidad técnica validada al 95%</li>
+                        <li>Buy-in completo de stakeholders</li>
+                        <li>Roadmap ejecutable para 12 semanas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ===== NAVIGATION ===== 
+        function goBack() {
+            window.close();
+            // Si no se puede cerrar, intentar volver
+            if (!window.closed) {
+                window.history.back();
+            }
+        }
+
+        // ===== SCROLL PROGRESS ===== 
+        function updateScrollProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height);
+            document.getElementById('scrollProgress').style.transform = `scaleX(${scrolled})`;
+        }
+
+        window.addEventListener('scroll', updateScrollProgress);
+
+        // ===== TIMELINE ANIMATION ===== 
+        function animateTimeline() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, {
+                threshold: 0.3,
+                rootMargin: '50px'
+            });
+
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // ===== PARALLAX EFFECT ===== 
+        function parallaxEffect() {
+            const hero = document.querySelector('.hero-parallax');
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        }
+
+        window.addEventListener('scroll', parallaxEffect);
+
+        // ===== SMOOTH SCROLL ===== 
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('.floating-header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ===== HEADER TRANSPARENCY ===== 
+        function updateHeaderTransparency() {
+            const header = document.querySelector('.floating-header');
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled > 100) {
+                header.style.background = 'rgba(10, 60, 82, 0.95)';
+            } else {
+                header.style.background = 'rgba(10, 60, 82, 0.85)';
+            }
+        }
+
+        window.addEventListener('scroll', updateHeaderTransparency);
+
+        // ===== INITIALIZATION ===== 
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 CORRESUR User Stories & Roadmap Loaded');
+            animateTimeline();
+            
+            // Highlight current assessment phase
+            const currentPhase = document.querySelector('.current-phase');
+            if (currentPhase) {
+                setTimeout(() => {
+                    currentPhase.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }, 1000);
+            }
+        });
+
+        // ===== ACCESSIBILITY ===== 
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+</body>
+</html>
