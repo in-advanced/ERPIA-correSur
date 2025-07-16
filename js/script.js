@@ -1,3 +1,34 @@
+// ===== NAVEGACIÓN MOBILE ===== 
+function toggleMobileMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('active');
+}
+
+// ===== NAVEGACIÓN A USER STORIES ===== 
+function navigateToUserStories() {
+    // Crear nueva ventana/pestaña con la página de roadmap
+    const userStoriesWindow = window.open('user-stories-roadmap.html', '_blank');
+    
+    // Si falla al abrir, mostrar instrucciones
+    if (!userStoriesWindow) {
+        showNotification('📖 Por favor, permite ventanas emergentes o haz clic derecho → "Abrir en nueva pestaña"', 'warning');
+    } else {
+        showNotification('🚀 Abriendo User Stories & Roadmap...', 'success');
+        closeMobileMenu(); // Cerrar menú mobile si está abierto
+    }
+}
+
 // ===== PDF CONTINUO SIN CORTES DE PÁGINA =====
 function downloadPDF() {
     console.log('🚀 Generando PDF continuo...');
@@ -456,7 +487,7 @@ function showNotification(message, type = 'success') {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: ${type === 'success' ? '#52b788' : '#e74c3c'};
+        background: ${type === 'success' ? '#52b788' : type === 'warning' ? '#f39c12' : '#e74c3c'};
         color: white;
         padding: 15px 25px;
         border-radius: 8px;
@@ -525,14 +556,16 @@ const observer = new IntersectionObserver((entries) => {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🏁 Página cargada para PDF continuo...');
+    console.log('🏁 Página cargada - Versión mejorada con menú hamburguesa...');
     
     // Verificaciones
     const mainContent = document.getElementById('main-content');
     const pdfButton = document.querySelector('.pdf-button');
+    const userStoriesButton = document.querySelector('.user-stories-button');
     
     console.log('📋 main-content:', mainContent ? '✅' : '❌');
     console.log('🔘 botón PDF:', pdfButton ? '✅' : '❌');
+    console.log('📖 botón User Stories:', userStoriesButton ? '✅' : '❌');
     
     if (mainContent) {
         console.log('📏 Contenido:', {
@@ -564,6 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
+            closeMobileMenu(); // Cerrar menú mobile al hacer clic
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 target.scrollIntoView({
@@ -574,13 +608,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Cerrar menú mobile al hacer click fuera
+    document.addEventListener('click', (e) => {
+        const navMobile = document.querySelector('.nav-mobile');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (navMobile && mobileMenu && !navMobile.contains(e.target) && mobileMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+
     // Animación de carga
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease-in-out';
     
     window.addEventListener('load', () => {
         document.body.style.opacity = '1';
-        console.log('🎯 Página lista para PDF continuo');
+        console.log('🎯 Página lista con navegación mejorada');
     });
 
     // Efecto parallax (solo desktop)
@@ -616,6 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('%c🚀 CORRESUR ERP+IA', 'color: #0a3c52; font-size: 24px; font-weight: bold;');
     console.log('%c💡 Desarrollado por IN-ADVANCED', 'color: #ffa94d; font-size: 16px;');
     console.log('%c📄 PDF Continuo sin cortes de página', 'color: #4a9bb5; font-size: 12px;');
+    console.log('%c📱 Navegación responsiva mejorada', 'color: #52b788; font-size: 12px;');
 });
 
 // Cargar html2pdf
@@ -669,6 +714,17 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         downloadPDF();
     }
+    
+    // Shortcut User Stories
+    if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+        e.preventDefault();
+        navigateToUserStories();
+    }
+    
+    // Cerrar menú mobile con ESC
+    if (e.key === 'Escape') {
+        closeMobileMenu();
+    }
 });
 
 // Analytics
@@ -689,4 +745,4 @@ window.addEventListener('load', () => {
     console.log(`⚡ Cargado en: ${Math.round(loadTime)}ms`);
 });
 
-console.log('🎉 Script PDF Continuo cargado - Sin cortes de página');
+console.log('🎉 Script mejorado cargado - Con menú hamburguesa y User Stories');
