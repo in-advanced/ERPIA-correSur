@@ -6,6 +6,9 @@
     <title>CORRESUR - User Stories & Roadmap</title>
     <meta name="description" content="Roadmap detallado y user stories para el desarrollo del ERP+IA de CORRESUR">
     
+    <!-- CDN para html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         :root {
             --primary-blue: #0a3c52;
@@ -30,8 +33,42 @@
             line-height: 1.6;
             color: var(--text-primary);
             overflow-x: hidden;
-            background-color: var(--white); /* MEJORA: Fondo base por si acaso */
+            background-color: var(--white);
         }
+        
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 60, 82, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid var(--secondary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* ===== HEADER SEMI-TRANSPARENTE ===== */
         .floating-header {
             position: fixed;
@@ -87,7 +124,7 @@
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
         }
-        .back-button {
+        .back-button, .pdf-button {
             background: var(--secondary-orange);
             color: var(--white);
             border: none;
@@ -96,12 +133,14 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            margin-left: 10px;
         }
-        .back-button:hover {
+        .back-button:hover, .pdf-button:hover {
             background: #e88a1a;
             transform: scale(1.05);
         }
-        /* ===== HERO SECTION - SIN PARALLAX ===== */
+        
+        /* ===== HERO SECTION ===== */
         .hero-parallax {
             height: 100vh;
             position: relative;
@@ -109,8 +148,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* MEJORA: Se quita la imagen y el parallax para máxima legibilidad. Se usa un gradiente. */
-            background: var(--gradient-primary); 
+            background: var(--gradient-primary);
         }
         .hero-content {
             text-align: center;
@@ -147,18 +185,57 @@
             font-weight: 600;
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        
+        /* ===== SUBTITLE ANIMATIONS ===== */
+        .animated-subtitle {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-subtitle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid var(--secondary-orange);
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--secondary-orange); }
+        }
+        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
         /* ===== ROADMAP VERTICAL - CON PARALLAX ===== */
         .roadmap-container {
             position: relative;
-            /* MEJORA: Esta es la ÚNICA sección con parallax. */
             background: 
                 linear-gradient(rgba(10, 60, 82, 0.90), rgba(10, 60, 82, 0.95)), 
-                url('img/backgrounParallax.jpg') center/cover;
-                /*url('https://i.imgur.com/Wp72G3n.jpg') center/cover; /* Usando una URL pública para prueba */
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="1000" height="1000" fill="url(%23grain)"/></svg>') center/cover;
             background-attachment: fixed;
             padding: 80px 0;
             overflow: hidden;
@@ -175,16 +252,14 @@
         }
         .roadmap-title {
             font-size: 2.8rem;
-            /* MEJORA: Color blanco para legibilidad sobre fondo parallax */
-            color: var(--white); 
+            color: var(--white);
             margin-bottom: 20px;
             font-weight: 300;
             text-shadow: 1px 1px 4px var(--black);
         }
         .roadmap-description {
             font-size: 1.2rem;
-            /* MEJORA: Color blanco para legibilidad sobre fondo parallax */
-            color: rgba(255, 255, 255, 0.85); 
+            color: rgba(255, 255, 255, 0.85);
             line-height: 1.6;
         }
         .timeline {
@@ -292,7 +367,7 @@
             margin-bottom: 15px;
         }
         .phase-description {
-            color: var(--text-secondary); /* Este color es para el texto dentro de las tarjetas blancas */
+            color: var(--text-secondary);
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -344,9 +419,9 @@
             animation: pulse 2s infinite;
             box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
         }
-        /* ===== USER STORIES SECTION - SIN PARALLAX ===== */
+        
+        /* ===== USER STORIES SECTION ===== */
         .user-stories-section {
-            /* MEJORA: Fondo sólido para legibilidad */
             background-color: var(--primary-blue);
             color: var(--white);
             padding: 80px 0;
@@ -424,9 +499,9 @@
             left: 0;
             color: var(--secondary-orange);
         }
-        /* ===== ASSESSMENT DETALLADO - SIN PARALLAX ===== */
+        
+        /* ===== ASSESSMENT DETALLADO ===== */
         .assessment-section {
-            /* MEJORA: Fondo claro para legibilidad */
             background-color: var(--light-blue);
             padding: 80px 0;
             position: relative;
@@ -485,6 +560,7 @@
             position: absolute;
             left: 0;
         }
+        
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .floating-header { padding: 10px 0; }
@@ -492,7 +568,6 @@
             .header-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
             .hero-title { font-size: 2.5rem; }
             .hero-subtitle { font-size: 1.1rem; }
-            /* Desactivar parallax en móviles para mejor rendimiento */
             .roadmap-container { background-attachment: scroll !important; }
             .timeline::before { left: 30px; }
             .timeline-item:nth-child(odd) .timeline-content,
@@ -512,16 +587,21 @@
             .timeline-marker { left: 30px; }
             .stories-grid, .assessment-grid { grid-template-columns: 1fr; gap: 20px; }
         }
+        
         /* ===== OPTIMIZACIÓN PARA PARALLAX ===== */
         @media (prefers-reduced-motion: reduce) {
             .roadmap-container { background-attachment: scroll !important; }
+            .typewriter { animation: none; border-right: none; }
+            .animated-subtitle::before { animation: none; }
         }
+        
         /* ===== ANIMATIONS ===== */
         @keyframes pulse {
             0% { transform: translateX(-50%) scale(1); }
             50% { transform: translateX(-50%) scale(1.1); }
             100% { transform: translateX(-50%) scale(1); }
         }
+        
         /* ===== SCROLL INDICATOR ===== */
         .scroll-progress {
             position: fixed;
@@ -534,6 +614,42 @@
             transform: scaleX(0);
             z-index: 1001;
         }
+        
+        /* ===== NOTIFICATION STYLES ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            transform: translateX(100%);
+            max-width: 400px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .notification.success {
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .notification.warning {
+            background: var(--warning-orange);
+            color: white;
+        }
+        
+        .notification.error {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
@@ -544,105 +660,674 @@
             <div class="logo-section">
                 <div>
                     <div class="logo-text">CORRESUR</div>
-                    <div class="logo-subtitle">User Stories & Roadmap</div>
+                    <div class="logo-subtitle animated-subtitle">User Stories & Roadmap</div>
                 </div>
             </div>
             <nav class="header-nav">
                 <a href="#roadmap" class="nav-link">📍 Roadmap</a>
                 <a href="#user-stories" class="nav-link">📖 User Stories</a>
                 <a href="#assessment" class="nav-link">🔍 Assessment</a>
+                <button class="pdf-button" onclick="downloadPDF()">📄 PDF Continuo</button>
                 <button class="back-button" onclick="goBack()">← Volver a Propuesta</button>
             </nav>
         </div>
     </header>
 
-    <section class="hero-parallax">
-        <div class="hero-content">
-            <h1 class="hero-title">Roadmap de Transformación Digital</h1>
-            <p class="hero-subtitle">De la visión a la realidad: 12 semanas para revolucionar CORRESUR</p>
-            <div class="hero-badges">
-                <span class="hero-badge">🎯 7 Fases Definidas</span>
-                <span class="hero-badge">📊 Assessment Detallado</span>
-                <span class="hero-badge">🚀 Entregables Claros</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="roadmap" class="roadmap-container">
-        <div class="roadmap-header">
-            <h2 class="roadmap-title">Roadmap Detallado del Proyecto</h2>
-            <p class="roadmap-description">
-                Cada fase del proyecto está diseñada para entregar valor incremental y construir 
-                sobre los logros anteriores, asegurando un progreso constante hacia la transformación digital completa.
-            </p>
-        </div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-marker"></div>
-                <div class="timeline-content">
-                    <span class="phase-number">FASE 1</span><h3 class="phase-title">Planificación & Setup</h3><div class="phase-duration">📅 Semanas 1-2</div>
-                    <p class="phase-description">Establecimiento de la infraestructura base y definición de los fundamentos del proyecto.</p>
-                    <div class="phase-details"><h4>🎯 Entregables Clave:</h4><ul><li>Infraestructura AWS configurada</li><li>Repositorios de código inicializados</li><li>Equipos de desarrollo asignados</li><li>Plan de trabajo detallado validado</li></ul></div>
+    <div id="main-content">
+        <section class="hero-parallax">
+            <div class="hero-content">
+                <h1 class="hero-title">Roadmap de Transformación Digital</h1>
+                <p class="hero-subtitle typewriter">De la visión a la realidad: 12 semanas para revolucionar CORRESUR</p>
+                <div class="hero-badges">
+                    <span class="hero-badge">🎯 7 Fases Definidas</span>
+                    <span class="hero-badge">📊 Assessment Detallado</span>
+                    <span class="hero-badge">🚀 Entregables Claros</span>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-marker"></div>
-                <div class="timeline-content current-phase">
-                    <span class="phase-number">FASE 2</span><h3 class="phase-title">Assessment & Análisis</h3><div class="phase-duration">📅 Semanas 4-6 (ACTUAL)</div>
-                    <p class="phase-description"><strong>Análisis profundo de los procesos actuales para identificar las mejores oportunidades de automatización con IA.</strong></p>
-                    <div class="phase-details"><h4>🔍 Metodología:</h4><ul><li>Entrevistas con Subject Matter Experts (SMEs)</li><li>Process Shadowing para observar workflows reales</li><li>Auditoría de datos y sistemas existentes</li><li>Matriz de priorización: Impacto vs Viabilidad</li></ul><h4 style="margin-top: 20px;">📊 Resultados:</h4><ul><li>3-5 procesos priorizados para automatización</li><li>Roadmap técnico de implementación</li><li>Estimaciones de ROI por caso de uso</li></ul></div>
+        </section>
+
+        <section id="roadmap" class="roadmap-container">
+            <div class="roadmap-header">
+                <h2 class="roadmap-title animated-subtitle">Roadmap Detallado del Proyecto</h2>
+                <p class="roadmap-description">
+                    Cada fase del proyecto está diseñada para entregar valor incremental y construir 
+                    sobre los logros anteriores, asegurando un progreso constante hacia la transformación digital completa.
+                </p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 1</span>
+                        <h3 class="phase-title">Planificación & Setup</h3>
+                        <div class="phase-duration">📅 Semanas 1-2</div>
+                        <p class="phase-description">Establecimiento de la infraestructura base y definición de los fundamentos del proyecto.</p>
+                        <div class="phase-details">
+                            <h4>🎯 Entregables Clave:</h4>
+                            <ul>
+                                <li>Infraestructura AWS configurada</li>
+                                <li>Repositorios de código inicializados</li>
+                                <li>Equipos de desarrollo asignados</li>
+                                <li>Plan de trabajo detallado validado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content current-phase">
+                        <span class="phase-number">FASE 2</span>
+                        <h3 class="phase-title">Assessment & Análisis</h3>
+                        <div class="phase-duration">📅 Semanas 4-6 (ACTUAL)</div>
+                        <p class="phase-description"><strong>Análisis profundo de los procesos actuales para identificar las mejores oportunidades de automatización con IA.</strong></p>
+                        <div class="phase-details">
+                            <h4>🔍 Metodología:</h4>
+                            <ul>
+                                <li>Entrevistas con Subject Matter Experts (SMEs)</li>
+                                <li>Process Shadowing para observar workflows reales</li>
+                                <li>Auditoría de datos y sistemas existentes</li>
+                                <li>Matriz de priorización: Impacto vs Viabilidad</li>
+                            </ul>
+                            <h4 style="margin-top: 20px;">📊 Resultados:</h4>
+                            <ul>
+                                <li>3-5 procesos priorizados para automatización</li>
+                                <li>Roadmap técnico de implementación</li>
+                                <li>Estimaciones de ROI por caso de uso</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 3</span>
+                        <h3 class="phase-title">Desarrollo IA - Sprint 1</h3>
+                        <div class="phase-duration">📅 Semanas 7-9</div>
+                        <p class="phase-description">Desarrollo del primer agente de IA basado en los resultados del assessment.</p>
+                        <div class="phase-details">
+                            <h4>🚀 Entregables:</h4>
+                            <ul>
+                                <li>Agente IA especializado funcionando</li>
+                                <li>Integración con sistemas existentes</li>
+                                <li>Interface de usuario intuitiva</li>
+                                <li>Testing y validación con usuarios</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 4</span>
+                        <h3 class="phase-title">ERP Core - Contabilidad & RRHH</h3>
+                        <div class="phase-duration">📅 Semanas 10-11</div>
+                        <p class="phase-description">Implementación de los módulos centrales del ERP con integración IA completa.</p>
+                        <div class="phase-details">
+                            <h4>💼 Módulos Principales:</h4>
+                            <ul>
+                                <li>Contabilidad con IA de conciliación</li>
+                                <li>RRHH con cálculo automático de planillas</li>
+                                <li>Tesorería con predicción de flujo de caja</li>
+                                <li>Reportería ejecutiva con insights IA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 5</span>
+                        <h3 class="phase-title">Desarrollo IA - Sprint 2</h3>
+                        <div class="phase-duration">📅 Semanas 12-14</div>
+                        <p class="phase-description">Segundo agente IA con capacidades avanzadas y multicanal.</p>
+                        <div class="phase-details">
+                            <h4>🤖 Capacidades Avanzadas:</h4>
+                            <ul>
+                                <li>Procesamiento de voz y texto</li>
+                                <li>Integración WhatsApp Business</li>
+                                <li>IA predictiva para ventas</li>
+                                <li>Análisis de documentos con OCR</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 6</span>
+                        <h3 class="phase-title">Integración & BI</h3>
+                        <div class="phase-duration">📅 Semanas 15-16</div>
+                        <p class="phase-description">Unificación de sistemas y desarrollo de capacidades de Business Intelligence avanzado.</p>
+                        <div class="phase-details">
+                            <h4>🔗 Integraciones:</h4>
+                            <ul>
+                                <li>Conectores CRM existentes</li>
+                                <li>APIs bancarias bolivianas</li>
+                                <li>Dashboards en tiempo real</li>
+                                <li>Sistema de gestión documental CITES</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="phase-number">FASE 7</span>
+                        <h3 class="phase-title">Go-Live & Soporte</h3>
+                        <div class="phase-duration">📅 Semanas 17-18</div>
+                        <p class="phase-description">Puesta en producción completa con capacitación y soporte extendido.</p>
+                        <div class="phase-details">
+                            <h4>🎯 Actividades Finales:</h4>
+                            <ul>
+                                <li>Migración de datos y puesta en producción</li>
+                                <li>Capacitación completa de usuarios</li>
+                                <li>Documentación técnica y de usuario</li>
+                                <li>3 meses de soporte post go-live</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content"><span class="phase-number">FASE 3</span><h3 class="phase-title">Desarrollo IA - Sprint 1</h3><div class="phase-duration">📅 Semanas 7-9</div><p class="phase-description">Desarrollo del primer agente de IA basado en los resultados del assessment.</p><div class="phase-details"><h4>🚀 Entregables:</h4><ul><li>Agente IA especializado funcionando</li><li>Integración con sistemas existentes</li><li>Interface de usuario intuitiva</li><li>Testing y validación con usuarios</li></ul></div></div></div>
-            <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content"><span class="phase-number">FASE 4</span><h3 class="phase-title">ERP Core - Contabilidad & RRHH</h3><div class="phase-duration">📅 Semanas 10-11</div><p class="phase-description">Implementación de los módulos centrales del ERP con integración IA completa.</p><div class="phase-details"><h4>💼 Módulos Principales:</h4><ul><li>Contabilidad con IA de conciliación</li><li>RRHH con cálculo automático de planillas</li><li>Tesorería con predicción de flujo de caja</li><li>Reportería ejecutiva con insights IA</li></ul></div></div></div>
-            <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content"><span class="phase-number">FASE 5</span><h3 class="phase-title">Desarrollo IA - Sprint 2</h3><div class="phase-duration">📅 Semanas 12-14</div><p class="phase-description">Segundo agente IA con capacidades avanzadas y multicanal.</p><div class="phase-details"><h4>🤖 Capacidades Avanzadas:</h4><ul><li>Procesamiento de voz y texto</li><li>Integración WhatsApp Business</li><li>IA predictiva para ventas</li><li>Análisis de documentos con OCR</li></ul></div></div></div>
-            <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content"><span class="phase-number">FASE 6</span><h3 class="phase-title">Integración & BI</h3><div class="phase-duration">📅 Semanas 15-16</div><p class="phase-description">Unificación de sistemas y desarrollo de capacidades de Business Intelligence avanzado.</p><div class="phase-details"><h4>🔗 Integraciones:</h4><ul><li>Conectores CRM existentes</li><li>APIs bancarias bolivianas</li><li>Dashboards en tiempo real</li><li>Sistema de gestión documental CITES</li></ul></div></div></div>
-            <div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content"><span class="phase-number">FASE 7</span><h3 class="phase-title">Go-Live & Soporte</h3><div class="phase-duration">📅 Semanas 17-18</div><p class="phase-description">Puesta en producción completa con capacitación y soporte extendido.</p><div class="phase-details"><h4>🎯 Actividades Finales:</h4><ul><li>Migración de datos y puesta en producción</li><li>Capacitación completa de usuarios</li><li>Documentación técnica y de usuario</li><li>3 meses de soporte post go-live</li></ul></div></div></div>
-        </div>
-    </section>
+        </section>
 
-    <section id="user-stories" class="user-stories-section">
-        <div class="user-stories-container">
-            <div class="stories-header">
-                <h2 class="stories-title">User Stories Detalladas</h2>
-                <p>Historias de usuario que guían el desarrollo de cada funcionalidad del sistema</p>
+        <section id="user-stories" class="user-stories-section">
+            <div class="user-stories-container">
+                <div class="stories-header">
+                    <h2 class="stories-title animated-subtitle">User Stories Detalladas</h2>
+                    <p>Historias de usuario que guían el desarrollo de cada funcionalidad del sistema</p>
+                </div>
+                <div class="stories-grid">
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">👨‍💼</div>
+                            <div class="story-title">Visión Ejecutiva 360°</div>
+                        </div>
+                        <div class="story-role">Como Gerente General</div>
+                        <div class="story-want">Quiero tener una vista consolidada de la operación en tiempo real</div>
+                        <div class="story-so">Para tomar decisiones estratégicas basadas en datos</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Dashboard con KPIs principales</li>
+                                <li>Reportes por voz</li>
+                                <li>Alertas de anomalías</li>
+                                <li>Acceso móvil completo</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">👨‍💻</div>
+                            <div class="story-title">Asistente IA Personal</div>
+                        </div>
+                        <div class="story-role">Como Agente de Seguros</div>
+                        <div class="story-want">Quiero un asistente IA para consultas de clientes y normativas</div>
+                        <div class="story-so">Para brindar respuestas precisas e inmediatas</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Consultas de pólizas por voz/texto</li>
+                                <li>Conocimiento de Ley de Seguros</li>
+                                <li>Integración con WhatsApp</li>
+                                <li>Historial de interacciones</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">🧮</div>
+                            <div class="story-title">Contabilidad Automatizada</div>
+                        </div>
+                        <div class="story-role">Como Contador</div>
+                        <div class="story-want">Quiero que el sistema concilie automáticamente las cuentas</div>
+                        <div class="story-so">Para eliminar trabajo manual y reducir errores</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Conciliación automática diaria</li>
+                                <li>Detección de discrepancias</li>
+                                <li>Reportes contables automáticos</li>
+                                <li>Asientos contables inteligentes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">👤</div>
+                            <div class="story-title">Autoservicio 24/7</div>
+                        </div>
+                        <div class="story-role">Como Cliente</div>
+                        <div class="story-want">Quiero consultar mis pólizas y reportar siniestros a cualquier hora</div>
+                        <div class="story-so">Para tener control sin depender de horarios de oficina</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Portal web responsivo</li>
+                                <li>Chatbot inteligente</li>
+                                <li>Notificaciones automáticas</li>
+                                <li>Reporte de siniestros por WhatsApp</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">🔍</div>
+                            <div class="story-title">Gestión de Siniestros</div>
+                        </div>
+                        <div class="story-role">Como Ajustador</div>
+                        <div class="story-want">Quiero que el sistema clasifique y asigne los casos</div>
+                        <div class="story-so">Para enfocarme en la evaluación y no en tareas admin.</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Clasificación automática</li>
+                                <li>Asignación inteligente</li>
+                                <li>OCR para documentos</li>
+                                <li>Seguimiento automatizado</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-header">
+                            <div class="story-icon">👥</div>
+                            <div class="story-title">Gestión de Personal</div>
+                        </div>
+                        <div class="story-role">Como RRHH</div>
+                        <div class="story-want">Quiero automatizar el cálculo de planillas y beneficios</div>
+                        <div class="story-so">Para cumplir con normativas sin errores manuales</div>
+                        <div class="story-acceptance">
+                            <h5>Criterios de Aceptación:</h5>
+                            <ul>
+                                <li>Cálculo automático de planillas</li>
+                                <li>Reportes para AFP y CNS</li>
+                                <li>Control de asistencia</li>
+                                <li>Portal del empleado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stories-grid">
-                <div class="story-card"><div class="story-header"><div class="story-icon">👨‍💼</div><div class="story-title">Visión Ejecutiva 360°</div></div><div class="story-role">Como Gerente General</div><div class="story-want">Quiero tener una vista consolidada de la operación en tiempo real</div><div class="story-so">Para tomar decisiones estratégicas basadas en datos</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Dashboard con KPIs principales</li><li>Reportes por voz</li><li>Alertas de anomalías</li><li>Acceso móvil completo</li></ul></div></div>
-                <div class="story-card"><div class="story-header"><div class="story-icon">👨‍💻</div><div class="story-title">Asistente IA Personal</div></div><div class="story-role">Como Agente de Seguros</div><div class="story-want">Quiero un asistente IA para consultas de clientes y normativas</div><div class="story-so">Para brindar respuestas precisas e inmediatas</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Consultas de pólizas por voz/texto</li><li>Conocimiento de Ley de Seguros</li><li>Integración con WhatsApp</li><li>Historial de interacciones</li></ul></div></div>
-                <div class="story-card"><div class="story-header"><div class="story-icon">🧮</div><div class="story-title">Contabilidad Automatizada</div></div><div class="story-role">Como Contador</div><div class="story-want">Quiero que el sistema concilie automáticamente las cuentas</div><div class="story-so">Para eliminar trabajo manual y reducir errores</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Conciliación automática diaria</li><li>Detección de discrepancias</li><li>Reportes contables automáticos</li><li>Asientos contables inteligentes</li></ul></div></div>
-                <div class="story-card"><div class="story-header"><div class="story-icon">👤</div><div class="story-title">Autoservicio 24/7</div></div><div class="story-role">Como Cliente</div><div class="story-want">Quiero consultar mis pólizas y reportar siniestros a cualquier hora</div><div class="story-so">Para tener control sin depender de horarios de oficina</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Portal web responsivo</li><li>Chatbot inteligente</li><li>Notificaciones automáticas</li><li>Reporte de siniestros por WhatsApp</li></ul></div></div>
-                <div class="story-card"><div class="story-header"><div class="story-icon">🔍</div><div class="story-title">Gestión de Siniestros</div></div><div class="story-role">Como Ajustador</div><div class="story-want">Quiero que el sistema clasifique y asigne los casos</div><div class="story-so">Para enfocarme en la evaluación y no en tareas admin.</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Clasificación automática</li><li>Asignación inteligente</li><li>OCR para documentos</li><li>Seguimiento automatizado</li></ul></div></div>
-                <div class="story-card"><div class="story-header"><div class="story-icon">👥</div><div class="story-title">Gestión de Personal</div></div><div class="story-role">Como RRHH</div><div class="story-want">Quiero automatizar el cálculo de planillas y beneficios</div><div class="story-so">Para cumplir con normativas sin errores manuales</div><div class="story-acceptance"><h5>Criterios de Aceptación:</h5><ul><li>Cálculo automático de planillas</li><li>Reportes para AFP y CNS</li><li>Control de asistencia</li><li>Portal del empleado</li></ul></div></div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="assessment" class="assessment-section">
-        <div class="assessment-container">
-            <div class="assessment-header">
-                <h2 class="assessment-title">Assessment Metodológico Detallado</h2>
-                <p>Proceso estructurado para identificar las mejores oportunidades de automatización con IA</p>
+        <section id="assessment" class="assessment-section">
+            <div class="assessment-container">
+                <div class="assessment-header">
+                    <h2 class="assessment-title animated-subtitle">Assessment Metodológico Detallado</h2>
+                    <p>Proceso estructurado para identificar las mejores oportunidades de automatización con IA</p>
+                </div>
+                <div class="assessment-grid">
+                    <div class="assessment-card">
+                        <h4>🎯 Semana 4: Kick-off y Discovery</h4>
+                        <ul>
+                            <li>Reunión de alineación con stakeholders</li>
+                            <li>Identificación de Subject Matter Experts (SMEs)</li>
+                            <li>Mapeo de procesos de alto nivel</li>
+                            <li>Process Shadowing con usuarios reales</li>
+                            <li>Documentación de pain points actuales</li>
+                        </ul>
+                    </div>
+                    <div class="assessment-card">
+                        <h4>📊 Semana 5: Auditoría de Datos</h4>
+                        <ul>
+                            <li>Inventario de fuentes de datos</li>
+                            <li>Evaluación de calidad y disponibilidad</li>
+                            <li>Identificación de APIs y conectores</li>
+                            <li>Análisis de viabilidad técnica por proceso</li>
+                            <li>Canvas de casos de uso detallados</li>
+                        </ul>
+                    </div>
+                    <div class="assessment-card">
+                        <h4>🎯 Semana 6: Priorización y Roadmap</h4>
+                        <ul>
+                            <li>Matriz de impacto vs complejidad</li>
+                            <li>Workshop de priorización con decisores</li>
+                            <li>Selección de casos de uso para Sprints</li>
+                            <li>Estimación de ROI por automatización</li>
+                            <li>Definición del roadmap técnico</li>
+                        </ul>
+                    </div>
+                    <div class="assessment-card">
+                        <h4>🔍 Metodología P. Shadowing</h4>
+                        <ul>
+                            <li>Observación directa de workflows</li>
+                            <li>Identificación de tareas repetitivas</li>
+                            <li>Medición de tiempos por actividad</li>
+                            <li>Documentación de reglas implícitas</li>
+                            <li>Captura de excepciones y casos edge</li>
+                        </ul>
+                    </div>
+                    <div class="assessment-card">
+                        <h4>📋 Canvas de Casos de Uso</h4>
+                        <ul>
+                            <li>Descripción del proceso actual</li>
+                            <li>Propuesta de solución con IA</li>
+                            <li>Datos requeridos y disponibles</li>
+                            <li>Estimación de impacto cuantificable</li>
+                            <li>Riesgos técnicos y de adopción</li>
+                        </ul>
+                    </div>
+                    <div class="assessment-card">
+                        <h4>⚡ Criterios de Éxito</h4>
+                        <ul>
+                            <li>3-5 procesos claramente priorizados</li>
+                            <li>ROI estimado > 300% en 18 meses</li>
+                            <li>Viabilidad técnica validada al 95%</li>
+                            <li>Buy-in completo de stakeholders</li>
+                            <li>Roadmap ejecutable para 12 semanas</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="assessment-grid">
-                <div class="assessment-card"><h4>🎯 Semana 4: Kick-off y Discovery</h4><ul><li>Reunión de alineación con stakeholders</li><li>Identificación de Subject Matter Experts (SMEs)</li><li>Mapeo de procesos de alto nivel</li><li>Process Shadowing con usuarios reales</li><li>Documentación de pain points actuales</li></ul></div>
-                <div class="assessment-card"><h4>📊 Semana 5: Auditoría de Datos</h4><ul><li>Inventario de fuentes de datos</li><li>Evaluación de calidad y disponibilidad</li><li>Identificación de APIs y conectores</li><li>Análisis de viabilidad técnica por proceso</li><li>Canvas de casos de uso detallados</li></ul></div>
-                <div class="assessment-card"><h4>🎯 Semana 6: Priorización y Roadmap</h4><ul><li>Matriz de impacto vs complejidad</li><li>Workshop de priorización con decisores</li><li>Selección de casos de uso para Sprints</li><li>Estimación de ROI por automatización</li><li>Definición del roadmap técnico</li></ul></div>
-                <div class="assessment-card"><h4>🔍 Metodología P. Shadowing</h4><ul><li>Observación directa de workflows</li><li>Identificación de tareas repetitivas</li><li>Medición de tiempos por actividad</li><li>Documentación de reglas implícitas</li><li>Captura de excepciones y casos edge</li></ul></div>
-                <div class="assessment-card"><h4>📋 Canvas de Casos de Uso</h4><ul><li>Descripción del proceso actual</li><li>Propuesta de solución con IA</li><li>Datos requeridos y disponibles</li><li>Estimación de impacto cuantificable</li><li>Riesgos técnicos y de adopción</li></ul></div>
-                <div class="assessment-card"><h4>⚡ Criterios de Éxito</h4><ul><li>3-5 procesos claramente priorizados</li><li>ROI estimado > 300% en 18 meses</li><li>Viabilidad técnica validada al 95%</li><li>Buy-in completo de stakeholders</li><li>Roadmap ejecutable para 12 semanas</li></ul></div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <script>
-        // ===== NAVIGATION =====
+        // ===== NAVEGACIÓN =====
         function goBack() {
             window.close();
             if (!window.closed) {
                 window.history.back();
             }
         }
+
+        // ===== PDF CONTINUO SIN CORTES DE PÁGINA =====
+        function downloadPDF() {
+            console.log('🚀 Generando PDF continuo...');
+            
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.innerHTML = `
+                <div class="loading-spinner"></div>
+                Generando PDF continuo sin cortes...
+            `;
+            document.body.appendChild(loadingOverlay);
+
+            // Verificar disponibilidad
+            if (typeof html2pdf === 'undefined') {
+                console.error('❌ html2pdf no disponible');
+                if (document.body.contains(loadingOverlay)) {
+                    document.body.removeChild(loadingOverlay);
+                }
+                showNotification('❌ Error: Librería PDF no cargada', 'error');
+                return;
+            }
+
+            const element = document.getElementById('main-content');
+            if (!element) {
+                console.error('❌ Contenido no encontrado');
+                if (document.body.contains(loadingOverlay)) {
+                    document.body.removeChild(loadingOverlay);
+                }
+                showNotification('❌ Error: Contenido no encontrado', 'error');
+                return;
+            }
+
+            // Medir el contenido para crear una página única
+            const contentHeight = element.scrollHeight;
+            const contentWidth = element.scrollWidth;
+            
+            console.log(`📏 Dimensiones del contenido: ${contentWidth}x${contentHeight}px`);
+
+            // Configuración para PDF CONTINUO (página única muy larga)
+            const opt = {
+                margin: 5,
+                filename: 'CORRESUR_UserStories_Roadmap_Continuo.pdf',
+                image: { 
+                    type: 'jpeg', 
+                    quality: 0.9 
+                },
+                html2canvas: { 
+                    scale: 1.2,
+                    useCORS: false,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: true,
+                    height: contentHeight + 100,
+                    width: contentWidth,
+                    scrollX: 0,
+                    scrollY: 0,
+                    onclone: function(clonedDoc) {
+                        console.log('📋 Preparando documento continuo...');
+                        
+                        // Aplicar estilos para PDF continuo
+                        const style = clonedDoc.createElement('style');
+                        style.innerHTML = `
+                            /* ESTILOS PARA PDF CONTINUO */
+                            
+                            body { 
+                                background: white !important; 
+                                color: black !important;
+                                font-family: Arial, sans-serif !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                overflow: visible !important;
+                            }
+                            
+                            /* Ocultar elementos de navegación */
+                            .floating-header, .scroll-progress, .loading-overlay { 
+                                display: none !important; 
+                            }
+                            
+                            /* Contenedor principal sin restricciones */
+                            #main-content {
+                                display: block !important;
+                                visibility: visible !important;
+                                opacity: 1 !important;
+                                position: static !important;
+                                width: 100% !important;
+                                height: auto !important;
+                                overflow: visible !important;
+                                page-break-inside: auto !important;
+                                break-inside: auto !important;
+                            }
+                            
+                            /* ELIMINAR TODOS LOS CORTES DE PÁGINA */
+                            *, *::before, *::after {
+                                page-break-inside: auto !important;
+                                break-inside: auto !important;
+                                page-break-before: auto !important;
+                                break-before: auto !important;
+                                page-break-after: auto !important;
+                                break-after: auto !important;
+                            }
+                            
+                            /* Asegurar flujo continuo */
+                            .hero-parallax, .roadmap-container, .user-stories-section, .assessment-section {
+                                page-break-inside: auto !important;
+                                break-inside: auto !important;
+                                margin-bottom: 20px !important;
+                                display: block !important;
+                            }
+                            
+                            /* Timeline sin restricciones */
+                            .timeline-item, .story-card, .assessment-card {
+                                page-break-inside: auto !important;
+                                break-inside: auto !important;
+                                margin-bottom: 10px !important;
+                            }
+                            
+                            /* Headers sin cortes */
+                            h1, h2, h3, h4, h5, h6 {
+                                page-break-inside: auto !important;
+                                break-inside: auto !important;
+                                page-break-after: auto !important;
+                                break-after: auto !important;
+                            }
+                            
+                            /* Secciones más compactas */
+                            .hero-parallax {
+                                height: auto !important;
+                                min-height: 200px !important;
+                                padding: 40px 0 !important;
+                            }
+                            
+                            .roadmap-container, .user-stories-section, .assessment-section {
+                                padding: 30px 0 !important;
+                            }
+                            
+                            /* Contenido más compacto */
+                            .hero-title {
+                                font-size: 2rem !important;
+                                margin-bottom: 10px !important;
+                            }
+                            
+                            .hero-subtitle {
+                                font-size: 1.1rem !important;
+                                margin-bottom: 15px !important;
+                            }
+                            
+                            .timeline-content {
+                                padding: 20px !important;
+                                margin-bottom: 15px !important;
+                            }
+                            
+                            .story-card, .assessment-card {
+                                padding: 20px !important;
+                                margin-bottom: 15px !important;
+                            }
+                            
+                            /* Texto más compacto */
+                            p, li {
+                                font-size: 11px !important;
+                                line-height: 1.3 !important;
+                                margin: 3px 0 !important;
+                            }
+                            
+                            h2 {
+                                font-size: 1.4rem !important;
+                                margin: 15px 0 10px 0 !important;
+                            }
+                            
+                            h3 {
+                                font-size: 1.2rem !important;
+                                margin: 10px 0 8px 0 !important;
+                            }
+                            
+                            h4 {
+                                font-size: 1.1rem !important;
+                                margin: 8px 0 5px 0 !important;
+                            }
+                            
+                            /* Grids más compactos */
+                            .stories-grid, .assessment-grid {
+                                display: block !important;
+                                gap: 15px !important;
+                            }
+                            
+                            /* Sin breaks en ningún lado */
+                            * {
+                                orphans: 1000 !important;
+                                widows: 1000 !important;
+                            }
+                        `;
+                        clonedDoc.head.appendChild(style);
+                        
+                        // Forzar visibilidad de todo
+                        const allElements = clonedDoc.querySelectorAll('*');
+                        allElements.forEach(el => {
+                            el.style.pageBreakInside = 'auto';
+                            el.style.breakInside = 'auto';
+                        });
+
+                        console.log('✅ Estilos continuos aplicados');
+                    }
+                },
+                jsPDF: { 
+                    unit: 'px',
+                    format: [contentWidth + 50, contentHeight + 100],
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            console.log('⚙️ Configuración PDF continuo:', opt);
+
+            // Preparar elemento
+            const originalStyles = {
+                display: element.style.display,
+                visibility: element.style.visibility,
+                opacity: element.style.opacity,
+                position: element.style.position,
+                overflow: element.style.overflow
+            };
+
+            element.style.display = 'block';
+            element.style.visibility = 'visible';
+            element.style.opacity = '1';
+            element.style.position = 'static';
+            element.style.overflow = 'visible';
+
+            // Ocultar elementos problemáticos
+            const problemElements = document.querySelectorAll('.floating-header, .scroll-progress');
+            problemElements.forEach(el => {
+                el.style.display = 'none';
+            });
+
+            console.log('🔄 Iniciando conversión continua...');
+
+            // Generar PDF continuo
+            html2pdf().set(opt).from(element).save()
+                .then(() => {
+                    console.log('✅ PDF continuo generado exitosamente');
+                    
+                    // Restaurar estilos
+                    Object.keys(originalStyles).forEach(prop => {
+                        element.style[prop] = originalStyles[prop];
+                    });
+                    
+                    problemElements.forEach(el => {
+                        el.style.display = '';
+                    });
+                    
+                    if (document.body.contains(loadingOverlay)) {
+                        document.body.removeChild(loadingOverlay);
+                    }
+                    
+                    showNotification('✅ PDF User Stories & Roadmap descargado', 'success');
+                })
+                .catch((error) => {
+                    console.error('❌ Error generando PDF continuo:', error);
+                    
+                    // Restaurar estilos
+                    Object.keys(originalStyles).forEach(prop => {
+                        element.style[prop] = originalStyles[prop];
+                    });
+                    
+                    problemElements.forEach(el => {
+                        el.style.display = '';
+                    });
+                    
+                    if (document.body.contains(loadingOverlay)) {
+                        document.body.removeChild(loadingOverlay);
+                    }
+                    
+                    showNotification('❌ Error generando PDF. Intente nuevamente.', 'error');
+                });
+        }
+
+        // ===== FUNCIONES DE NOTIFICACIÓN =====
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 6000);
+            
+            return notification;
+        }
+
         // ===== SCROLL PROGRESS =====
         function updateScrollProgress() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -665,6 +1350,42 @@
             timelineItems.forEach(item => {
                 observer.observe(item);
             });
+        }
+        
+        // ===== SUBTITLE ANIMATIONS =====
+        function animateSubtitles() {
+            const subtitles = document.querySelectorAll('.animated-subtitle');
+            subtitles.forEach((subtitle, index) => {
+                setTimeout(() => {
+                    subtitle.style.opacity = '1';
+                    subtitle.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+        
+        // ===== TYPEWRITER EFFECT =====
+        function typewriterEffect() {
+            const typewriterElement = document.querySelector('.typewriter');
+            if (typewriterElement && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                const text = typewriterElement.textContent;
+                typewriterElement.textContent = '';
+                let i = 0;
+                
+                const typeWriter = () => {
+                    if (i < text.length) {
+                        typewriterElement.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 80);
+                    } else {
+                        // Quitar el cursor después de completar
+                        setTimeout(() => {
+                            typewriterElement.classList.remove('typewriter');
+                        }, 2000);
+                    }
+                };
+                
+                setTimeout(typeWriter, 2000);
+            }
         }
         
         // ===== SMOOTH SCROLL =====
@@ -694,10 +1415,21 @@
         }
         window.addEventListener('scroll', updateHeaderTransparency);
         
-        // ===== INITIALIZATION =====
+        // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 CORRESUR User Stories & Roadmap Loaded');
+            console.log('🚀 CORRESUR User Stories & Roadmap Enhanced Loaded');
+            
+            // Inicializar animaciones
             animateTimeline();
+            animateSubtitles();
+            typewriterEffect();
+            
+            // Verificar html2pdf
+            if (typeof html2pdf !== 'undefined') {
+                console.log('✅ html2pdf disponible para PDF continuo');
+            } else {
+                console.warn('⚠️ html2pdf no encontrado');
+            }
         });
         
         // ===== ACCESSIBILITY =====
@@ -705,7 +1437,18 @@
             if (e.key === 'Escape') {
                 goBack();
             }
+            
+            // Shortcut PDF
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                downloadPDF();
+            }
         });
+
+        // ===== CONSOLE BRANDING =====
+        console.log('%c🚀 CORRESUR User Stories & Roadmap Enhanced', 'color: #0a3c52; font-size: 20px; font-weight: bold;');
+        console.log('%c📄 PDF Continuo sin cortes disponible', 'color: #ffa94d; font-size: 14px;');
+        console.log('%c✨ Efectos visuales mejorados', 'color: #4a9bb5; font-size: 12px;');
     </script>
 </body>
 </html>
