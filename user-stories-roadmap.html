@@ -1030,15 +1030,15 @@
             }
         }
 
-        // ===== PDF CONTINUO SIN CORTES DE PÁGINA =====
+        // ===== PDF CONTINUO SIN CORTES DE PÁGINA (MEJORADO) =====
         function downloadPDF() {
-            console.log('🚀 Generando PDF continuo...');
+            console.log('🚀 Generando PDF continuo mejorado...');
             
             const loadingOverlay = document.createElement('div');
             loadingOverlay.className = 'loading-overlay';
             loadingOverlay.innerHTML = `
                 <div class="loading-spinner"></div>
-                Generando PDF continuo sin cortes...
+                Generando PDF sin cortes ni líneas...
             `;
             document.body.appendChild(loadingOverlay);
 
@@ -1062,53 +1062,58 @@
                 return;
             }
 
-            // Medir el contenido para crear una página única
-            const contentHeight = element.scrollHeight;
-            const contentWidth = element.scrollWidth;
-            
-            console.log(`📏 Dimensiones del contenido: ${contentWidth}x${contentHeight}px`);
-
-            // Configuración para PDF CONTINUO (página única muy larga)
+            // Configuración optimizada para PDF continuo
             const opt = {
-                margin: 5,
+                margin: [10, 10, 10, 10],
                 filename: 'CORRESUR_UserStories_Roadmap_Continuo.pdf',
                 image: { 
                     type: 'jpeg', 
-                    quality: 0.9 
+                    quality: 0.98 
                 },
                 html2canvas: { 
-                    scale: 1.2,
-                    useCORS: false,
+                    scale: 1.5,
+                    useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    logging: true,
-                    height: contentHeight + 100,
-                    width: contentWidth,
-                    scrollX: 0,
-                    scrollY: 0,
+                    logging: false,
+                    letterRendering: true,
                     onclone: function(clonedDoc) {
-                        console.log('📋 Preparando documento continuo...');
+                        console.log('📋 Preparando documento sin cortes...');
                         
-                        // Aplicar estilos para PDF continuo
+                        // Aplicar estilos optimizados para PDF continuo
                         const style = clonedDoc.createElement('style');
                         style.innerHTML = `
-                            /* ESTILOS PARA PDF CONTINUO */
+                            /* RESETEAR TODO PARA PDF CONTINUO */
+                            * {
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                box-sizing: border-box !important;
+                                page-break-inside: avoid !important;
+                                break-inside: avoid !important;
+                                page-break-before: avoid !important;
+                                break-before: avoid !important;
+                                page-break-after: avoid !important;
+                                break-after: avoid !important;
+                            }
                             
                             body { 
                                 background: white !important; 
-                                color: black !important;
-                                font-family: Arial, sans-serif !important;
+                                color: #2c3e50 !important;
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+                                line-height: 1.4 !important;
                                 margin: 0 !important;
-                                padding: 0 !important;
+                                padding: 20px !important;
                                 overflow: visible !important;
+                                width: 100% !important;
                             }
                             
-                            /* Ocultar elementos de navegación */
-                            .floating-header, .scroll-progress, .loading-overlay { 
+                            /* OCULTAR ELEMENTOS DE NAVEGACIÓN */
+                            .floating-header, .scroll-progress, .loading-overlay, 
+                            .nav-menu, .back-button, .pdf-button { 
                                 display: none !important; 
                             }
                             
-                            /* Contenedor principal sin restricciones */
+                            /* CONTENEDOR PRINCIPAL LIMPIO */
                             #main-content {
                                 display: block !important;
                                 visibility: visible !important;
@@ -1117,192 +1122,553 @@
                                 width: 100% !important;
                                 height: auto !important;
                                 overflow: visible !important;
-                                page-break-inside: auto !important;
-                                break-inside: auto !important;
+                                background: white !important;
                             }
                             
-                            /* ELIMINAR TODOS LOS CORTES DE PÁGINA */
-                            *, *::before, *::after {
-                                page-break-inside: auto !important;
-                                break-inside: auto !important;
-                                page-break-before: auto !important;
-                                break-before: auto !important;
-                                page-break-after: auto !important;
-                                break-after: auto !important;
-                            }
-                            
-                            /* Asegurar flujo continuo */
-                            .hero-parallax, .roadmap-container, .user-stories-section, .assessment-section {
-                                page-break-inside: auto !important;
-                                break-inside: auto !important;
-                                margin-bottom: 20px !important;
-                                display: block !important;
-                            }
-                            
-                            /* Timeline sin restricciones */
-                            .timeline-item, .story-card, .assessment-card {
-                                page-break-inside: auto !important;
-                                break-inside: auto !important;
-                                margin-bottom: 10px !important;
-                            }
-                            
-                            /* Headers sin cortes */
-                            h1, h2, h3, h4, h5, h6 {
-                                page-break-inside: auto !important;
-                                break-inside: auto !important;
-                                page-break-after: auto !important;
-                                break-after: auto !important;
-                            }
-                            
-                            /* Secciones más compactas */
+                            /* HERO SECTION - COMPACTO */
                             .hero-parallax {
                                 height: auto !important;
-                                min-height: 200px !important;
-                                padding: 40px 0 !important;
+                                min-height: 180px !important;
+                                padding: 30px 20px !important;
+                                background: linear-gradient(135deg, #0a3c52 0%, #4a9bb5 100%) !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                                text-align: center !important;
+                                margin-bottom: 30px !important;
                             }
                             
-                            .roadmap-container, .user-stories-section, .assessment-section {
-                                padding: 30px 0 !important;
+                            .hero-content {
+                                max-width: 100% !important;
+                                padding: 0 !important;
                             }
                             
-                            /* Contenido más compacto */
                             .hero-title {
-                                font-size: 2rem !important;
+                                font-size: 2.2rem !important;
+                                color: white !important;
                                 margin-bottom: 10px !important;
+                                font-weight: 300 !important;
                             }
                             
                             .hero-subtitle {
                                 font-size: 1.1rem !important;
+                                color: rgba(255, 255, 255, 0.9) !important;
                                 margin-bottom: 15px !important;
+                            }
+                            
+                            .hero-badges {
+                                display: flex !important;
+                                justify-content: center !important;
+                                gap: 10px !important;
+                                flex-wrap: wrap !important;
+                            }
+                            
+                            .hero-badge {
+                                background: rgba(255, 255, 255, 0.2) !important;
+                                color: white !important;
+                                padding: 6px 12px !important;
+                                border-radius: 15px !important;
+                                font-size: 0.8rem !important;
+                                font-weight: 500 !important;
+                                border: 1px solid rgba(255, 255, 255, 0.3) !important;
+                            }
+                            
+                            /* ROADMAP SECTION - SIN PARALLAX NI LÍNEAS */
+                            .roadmap-container {
+                                background: #f8f9fa !important;
+                                padding: 30px 20px !important;
+                                margin-bottom: 30px !important;
+                            }
+                            
+                            .roadmap-header {
+                                text-align: center !important;
+                                margin-bottom: 30px !important;
+                            }
+                            
+                            .roadmap-title {
+                                font-size: 2rem !important;
+                                color: #0a3c52 !important;
+                                margin-bottom: 15px !important;
+                                font-weight: 300 !important;
+                            }
+                            
+                            .roadmap-description {
+                                font-size: 1rem !important;
+                                color: #5a6c7d !important;
+                                line-height: 1.6 !important;
+                                max-width: 800px !important;
+                                margin: 0 auto !important;
+                            }
+                            
+                            /* TIMELINE REDISEÑADO - SIN LÍNEA VERTICAL */
+                            .timeline {
+                                max-width: 100% !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                display: block !important;
+                            }
+                            
+                            .timeline::before {
+                                display: none !important;
+                            }
+                            
+                            .timeline-item {
+                                display: block !important;
+                                width: 100% !important;
+                                margin-bottom: 20px !important;
+                                opacity: 1 !important;
+                                transform: none !important;
+                            }
+                            
+                            .timeline-marker {
+                                display: none !important;
                             }
                             
                             .timeline-content {
+                                width: 100% !important;
+                                max-width: 100% !important;
+                                margin: 0 !important;
                                 padding: 20px !important;
+                                background: white !important;
+                                border-radius: 8px !important;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+                                text-align: left !important;
+                                position: relative !important;
+                            }
+                            
+                            .timeline-content::before {
+                                display: none !important;
+                            }
+                            
+                            .current-phase {
+                                border-left: 4px solid #f39c12 !important;
+                                background: #fff9f0 !important;
+                            }
+                            
+                            .current-phase::after {
+                                content: "🔥 FASE ACTUAL" !important;
+                                position: absolute !important;
+                                top: 10px !important;
+                                right: 10px !important;
+                                background: #f39c12 !important;
+                                color: white !important;
+                                padding: 4px 8px !important;
+                                font-size: 0.7rem !important;
+                                font-weight: 600 !important;
+                                border-radius: 4px !important;
+                            }
+                            
+                            .phase-number {
+                                background: linear-gradient(135deg, #0a3c52, #4a9bb5) !important;
+                                color: white !important;
+                                padding: 4px 12px !important;
+                                border-radius: 12px !important;
+                                font-size: 0.8rem !important;
+                                font-weight: 600 !important;
+                                margin-bottom: 10px !important;
+                                display: inline-block !important;
+                            }
+                            
+                            .phase-title {
+                                font-size: 1.3rem !important;
+                                color: #0a3c52 !important;
+                                margin-bottom: 8px !important;
+                                font-weight: 600 !important;
+                            }
+                            
+                            .phase-duration {
+                                color: #ffa94d !important;
+                                font-weight: 600 !important;
+                                margin-bottom: 12px !important;
+                                font-size: 0.9rem !important;
+                            }
+                            
+                            .phase-description {
+                                color: #5a6c7d !important;
                                 margin-bottom: 15px !important;
+                                line-height: 1.6 !important;
+                                font-size: 0.95rem !important;
                             }
                             
-                            .story-card, .assessment-card {
-                                padding: 20px !important;
+                            .phase-details {
+                                background: #e8f4f8 !important;
+                                padding: 15px !important;
+                                border-radius: 6px !important;
+                                margin-top: 12px !important;
+                            }
+                            
+                            .phase-details h4 {
+                                color: #0a3c52 !important;
+                                margin-bottom: 8px !important;
+                                font-size: 1rem !important;
+                            }
+                            
+                            .phase-details ul {
+                                list-style: none !important;
+                                margin: 10px 0 !important;
+                                padding: 0 !important;
+                            }
+                            
+                            .phase-details li {
+                                padding: 4px 0 !important;
+                                padding-left: 20px !important;
+                                position: relative !important;
+                                color: #5a6c7d !important;
+                                font-size: 0.9rem !important;
+                            }
+                            
+                            .phase-details li::before {
+                                content: "✓" !important;
+                                position: absolute !important;
+                                left: 0 !important;
+                                color: #52b788 !important;
+                                font-weight: bold !important;
+                            }
+                            
+                            /* USER STORIES SECTION */
+                            .user-stories-section {
+                                background: #0a3c52 !important;
+                                color: white !important;
+                                padding: 30px 20px !important;
+                                margin-bottom: 30px !important;
+                            }
+                            
+                            .user-stories-container {
+                                max-width: 100% !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                            
+                            .stories-header {
+                                text-align: center !important;
+                                margin-bottom: 30px !important;
+                            }
+                            
+                            .stories-title {
+                                font-size: 2rem !important;
                                 margin-bottom: 15px !important;
+                                font-weight: 300 !important;
                             }
                             
-                            /* Texto más compacto */
-                            p, li {
-                                font-size: 11px !important;
-                                line-height: 1.3 !important;
-                                margin: 3px 0 !important;
-                            }
-                            
-                            h2 {
-                                font-size: 1.4rem !important;
-                                margin: 15px 0 10px 0 !important;
-                            }
-                            
-                            h3 {
-                                font-size: 1.2rem !important;
-                                margin: 10px 0 8px 0 !important;
-                            }
-                            
-                            h4 {
-                                font-size: 1.1rem !important;
-                                margin: 8px 0 5px 0 !important;
-                            }
-                            
-                            /* Grids más compactos */
-                            .stories-grid, .assessment-grid {
+                            .stories-grid {
                                 display: block !important;
-                                gap: 15px !important;
+                                gap: 20px !important;
                             }
                             
-                            /* Sin breaks en ningún lado */
-                            * {
-                                orphans: 1000 !important;
-                                widows: 1000 !important;
+                            .story-card {
+                                background: rgba(255, 255, 255, 0.1) !important;
+                                padding: 20px !important;
+                                border-radius: 8px !important;
+                                margin-bottom: 20px !important;
+                                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                            }
+                            
+                            .story-header {
+                                display: flex !important;
+                                align-items: center !important;
+                                gap: 12px !important;
+                                margin-bottom: 15px !important;
+                            }
+                            
+                            .story-icon {
+                                font-size: 1.5rem !important;
+                                background: #ffa94d !important;
+                                color: white !important;
+                                padding: 8px !important;
+                                border-radius: 6px !important;
+                            }
+                            
+                            .story-title {
+                                font-size: 1.2rem !important;
+                                font-weight: 600 !important;
+                            }
+                            
+                            .story-role {
+                                color: #ffa94d !important;
+                                font-weight: 600 !important;
+                                margin-bottom: 8px !important;
+                            }
+                            
+                            .story-want, .story-so {
+                                margin-bottom: 12px !important;
+                                font-size: 0.95rem !important;
+                                line-height: 1.5 !important;
+                            }
+                            
+                            .story-acceptance {
+                                background: rgba(0, 0, 0, 0.2) !important;
+                                padding: 12px !important;
+                                border-radius: 6px !important;
+                                border-left: 3px solid #ffa94d !important;
+                            }
+                            
+                            .story-acceptance h5 {
+                                margin-bottom: 8px !important;
+                                color: #ffa94d !important;
+                            }
+                            
+                            .story-acceptance ul {
+                                list-style: none !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                            
+                            .story-acceptance li {
+                                padding: 2px 0 !important;
+                                padding-left: 15px !important;
+                                position: relative !important;
+                                font-size: 0.85rem !important;
+                            }
+                            
+                            .story-acceptance li::before {
+                                content: "→" !important;
+                                position: absolute !important;
+                                left: 0 !important;
+                                color: #ffa94d !important;
+                            }
+                            
+                            /* ASSESSMENT SECTION */
+                            .assessment-section {
+                                background: #e8f4f8 !important;
+                                padding: 30px 20px !important;
+                                margin-bottom: 0 !important;
+                            }
+                            
+                            .assessment-container {
+                                max-width: 100% !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                            
+                            .assessment-header {
+                                text-align: center !important;
+                                margin-bottom: 30px !important;
+                            }
+                            
+                            .assessment-title {
+                                font-size: 2rem !important;
+                                color: #0a3c52 !important;
+                                margin-bottom: 15px !important;
+                                font-weight: 300 !important;
+                            }
+                            
+                            .assessment-grid {
+                                display: block !important;
+                                gap: 20px !important;
+                            }
+                            
+                            .assessment-card {
+                                background: white !important;
+                                padding: 20px !important;
+                                border-radius: 8px !important;
+                                border-left: 4px solid #4a9bb5 !important;
+                                margin-bottom: 20px !important;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+                            }
+                            
+                            .assessment-card h4 {
+                                color: #0a3c52 !important;
+                                margin-bottom: 12px !important;
+                                font-size: 1.1rem !important;
+                            }
+                            
+                            .assessment-card ul {
+                                list-style: none !important;
+                                margin: 10px 0 !important;
+                                padding: 0 !important;
+                            }
+                            
+                            .assessment-card li {
+                                padding: 6px 0 !important;
+                                padding-left: 25px !important;
+                                position: relative !important;
+                                color: #5a6c7d !important;
+                                font-size: 0.9rem !important;
+                            }
+                            
+                            .assessment-card li::before {
+                                content: "🔍" !important;
+                                position: absolute !important;
+                                left: 0 !important;
+                            }
+                            
+                            /* TEXTO GENERAL */
+                            p {
+                                margin: 8px 0 !important;
+                                font-size: 0.95rem !important;
+                                line-height: 1.5 !important;
+                            }
+                            
+                            h1, h2, h3, h4, h5, h6 {
+                                page-break-after: avoid !important;
+                                break-after: avoid !important;
+                                margin-top: 0 !important;
+                            }
+                            
+                            /* ASEGURAR FLUJO CONTINUO */
+                            .hero-parallax, .roadmap-container, .user-stories-section, .assessment-section {
+                                page-break-inside: avoid !important;
+                                break-inside: avoid !important;
+                            }
+                            
+                            /* ELIMINAR ANIMACIONES */
+                            .animated-subtitle::before, .typewriter {
+                                animation: none !important;
+                                border-right: none !important;
                             }
                         `;
                         clonedDoc.head.appendChild(style);
                         
-                        // Forzar visibilidad de todo
-                        const allElements = clonedDoc.querySelectorAll('*');
-                        allElements.forEach(el => {
-                            el.style.pageBreakInside = 'auto';
-                            el.style.breakInside = 'auto';
-                        });
-
-                        console.log('✅ Estilos continuos aplicados');
+                        console.log('✅ Estilos mejorados aplicados - Sin líneas verticales');
                     }
                 },
                 jsPDF: { 
-                    unit: 'px',
-                    format: [contentWidth + 50, contentHeight + 100],
+                    unit: 'mm',
+                    format: 'a4',
                     orientation: 'portrait',
-                    compress: true
+                    compress: true,
+                    putOnlyUsedFonts: true
                 }
             };
 
-            console.log('⚙️ Configuración PDF continuo:', opt);
+            console.log('⚙️ Configuración PDF mejorada:', opt);
 
-            // Preparar elemento
-            const originalStyles = {
-                display: element.style.display,
-                visibility: element.style.visibility,
-                opacity: element.style.opacity,
-                position: element.style.position,
-                overflow: element.style.overflow
-            };
-
-            element.style.display = 'block';
-            element.style.visibility = 'visible';
-            element.style.opacity = '1';
-            element.style.position = 'static';
-            element.style.overflow = 'visible';
-
-            // Ocultar elementos problemáticos
-            const problemElements = document.querySelectorAll('.floating-header, .scroll-progress');
-            problemElements.forEach(el => {
-                el.style.display = 'none';
-            });
-
-            console.log('🔄 Iniciando conversión continua...');
-
-            // Generar PDF continuo
+            // Generar PDF mejorado
             html2pdf().set(opt).from(element).save()
                 .then(() => {
-                    console.log('✅ PDF continuo generado exitosamente');
-                    
-                    // Restaurar estilos
-                    Object.keys(originalStyles).forEach(prop => {
-                        element.style[prop] = originalStyles[prop];
-                    });
-                    
-                    problemElements.forEach(el => {
-                        el.style.display = '';
-                    });
+                    console.log('✅ PDF continuo sin líneas generado exitosamente');
                     
                     if (document.body.contains(loadingOverlay)) {
                         document.body.removeChild(loadingOverlay);
                     }
                     
-                    showNotification('✅ PDF User Stories & Roadmap descargado', 'success');
+                    showNotification('✅ PDF sin cortes descargado exitosamente', 'success');
                 })
                 .catch((error) => {
-                    console.error('❌ Error generando PDF continuo:', error);
-                    
-                    // Restaurar estilos
-                    Object.keys(originalStyles).forEach(prop => {
-                        element.style[prop] = originalStyles[prop];
-                    });
-                    
-                    problemElements.forEach(el => {
-                        el.style.display = '';
-                    });
+                    console.error('❌ Error generando PDF:', error);
                     
                     if (document.body.contains(loadingOverlay)) {
                         document.body.removeChild(loadingOverlay);
                     }
                     
-                    showNotification('❌ Error generando PDF. Intente nuevamente.', 'error');
+                    // Método alternativo de respaldo
+                    showNotification('⚠️ Intentando método alternativo...', 'warning');
+                    downloadPrintVersion();
                 });
+        }
+
+        // Método alternativo mejorado: Preparar para impresión directa
+        function downloadPrintVersion() {
+            console.log('🖨️ Preparando versión optimizada para impresión...');
+            
+            // Crear estilos mejorados para impresión continua
+            const printStyle = document.createElement('style');
+            printStyle.id = 'continuous-print-style';
+            printStyle.innerHTML = `
+                @media print {
+                    @page {
+                        size: A4 portrait;
+                        margin: 15mm;
+                    }
+                    
+                    body {
+                        background: white !important;
+                        color: black !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        font-size: 12px !important;
+                        line-height: 1.4 !important;
+                        font-family: Arial, sans-serif !important;
+                    }
+                    
+                    /* Ocultar navegación */
+                    .floating-header, .scroll-progress, .loading-overlay, .back-button, .pdf-button {
+                        display: none !important;
+                    }
+                    
+                    /* Mostrar solo contenido principal */
+                    body * {
+                        visibility: hidden !important;
+                    }
+                    
+                    #main-content, #main-content * {
+                        visibility: visible !important;
+                    }
+                    
+                    #main-content {
+                        position: absolute !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        width: 100% !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                    }
+                    
+                    /* Eliminar timeline vertical */
+                    .timeline::before {
+                        display: none !important;
+                    }
+                    
+                    .timeline-marker {
+                        display: none !important;
+                    }
+                    
+                    .timeline-content {
+                        width: 100% !important;
+                        margin: 0 0 10px 0 !important;
+                        padding: 15px !important;
+                        border: 1px solid #ddd !important;
+                    }
+                    
+                    .timeline-content::before {
+                        display: none !important;
+                    }
+                    
+                    /* Ajustar secciones */
+                    .hero-parallax {
+                        height: auto !important;
+                        min-height: 100px !important;
+                        padding: 20px !important;
+                    }
+                    
+                    .roadmap-container, .user-stories-section, .assessment-section {
+                        padding: 20px 0 !important;
+                        background: transparent !important;
+                    }
+                    
+                    .stories-grid, .assessment-grid {
+                        display: block !important;
+                    }
+                    
+                    .story-card, .assessment-card {
+                        margin-bottom: 10px !important;
+                        padding: 10px !important;
+                        border: 1px solid #ddd !important;
+                    }
+                    
+                    /* Eliminar breaks */
+                    * {
+                        page-break-inside: auto !important;
+                        break-inside: auto !important;
+                    }
+                }
+            `;
+            document.head.appendChild(printStyle);
+            
+            showNotification('📄 Listo para imprimir. Use Ctrl+P y seleccione "Guardar como PDF"', 'success');
+            
+            // Esperar un momento y abrir diálogo de impresión
+            setTimeout(() => {
+                window.print();
+                
+                // Limpiar después de 5 segundos
+                setTimeout(() => {
+                    const styleElement = document.getElementById('continuous-print-style');
+                    if (styleElement) {
+                        document.head.removeChild(styleElement);
+                    }
+                }, 5000);
+            }, 1000);
         }
 
         // ===== FUNCIONES DE NOTIFICACIÓN =====
