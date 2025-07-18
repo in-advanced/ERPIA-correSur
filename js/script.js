@@ -31,13 +31,13 @@ function navigateToUserStories() {
 
 // ===== PDF CONTINUO SIN CORTES DE PÁGINA =====
 function downloadPDF() {
-    console.log('🚀 Generando PDF continuo...');
+    console.log('🚀 Generando PDF ...');
     
     const loadingOverlay = document.createElement('div');
     loadingOverlay.className = 'loading-overlay';
     loadingOverlay.innerHTML = `
         <div class="loading-spinner"></div>
-        Generando PDF continuo (sin cortes)...
+        Generando PDF ...
     `;
     document.body.appendChild(loadingOverlay);
 
@@ -86,7 +86,7 @@ function downloadPDF() {
             scrollX: 0,
             scrollY: 0,
             onclone: function(clonedDoc) {
-                console.log('📋 Preparando documento continuo...');
+                console.log('📋 Preparando documento ...');
                 
                 // Aplicar estilos para PDF continuo
                 const style = clonedDoc.createElement('style');
@@ -339,7 +339,7 @@ function downloadPDF() {
                 document.body.removeChild(loadingOverlay);
             }
             
-            showNotification('✅ PDF continuo descargado (sin cortes de página)', 'success');
+            showNotification('✅ PDF descargado', 'success');
             trackEvent('PDF', 'download_continuous_success', 'propuesta_continua');
         })
         .catch((error) => {
