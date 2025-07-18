@@ -1,26 +1,3 @@
-¡Entendido\! El efecto parallax es muy atractivo, pero si no se implementa con cuidado, puede arruinar por completo la legibilidad. El problema principal es usar la misma imagen de fondo oscura en secciones donde el texto también es oscuro o en secciones que no tienen un fondo sólido para el contenido.
-
-Te he preparado una versión mejorada del código que soluciona estos problemas.
-
-### \#\# Resumen de los Cambios
-
-1.  **Sección Principal (Hero):** Eliminé el parallax y la imagen. Ahora tiene un fondo de gradiente sólido (`--gradient-primary`) que garantiza que el título blanco sea **siempre legible**.
-2.  **Sección Roadmap:** **Esta es la única sección que conserva el efecto parallax**. Ajusté los colores del título (`.roadmap-title`) y la descripción de esta sección a blanco con una sombra de texto para que resalten sobre el fondo con la imagen.
-3.  **Otras Secciones (`User Stories` y `Assessment`):** Eliminé el parallax y las imágenes de fondo. Ahora usan colores de fondo sólidos que contrastan perfectamente con el contenido:
-      * **User Stories:** Fondo azul oscuro (`--primary-blue`) para que las tarjetas claras y el texto blanco resalten.
-      * **Assessment:** Fondo azul muy claro (`--light-blue`) para que los títulos y el texto oscuro sean fáciles de leer.
-4.  **JavaScript:** Eliminé la función `parallaxEffect()` que movía los elementos. El efecto parallax en el Roadmap se logra ahora **únicamente con CSS** (`background-attachment: fixed`), que es más simple y eficiente.
-5.  **CSS General:** Corregí los errores de sintaxis en la propiedad `background` y aseguré que los colores del texto siempre tengan un alto contraste con sus fondos.
-
-El resultado es un diseño más limpio, profesional y, lo más importante, **fácil de leer**, mientras se mantiene el atractivo efecto parallax de forma estratégica solo donde funciona bien.
-
------
-
-### \#\# Código HTML Mejorado
-
-Aquí tienes el código completo. Simplemente copia y reemplaza todo el contenido de tu archivo.
-
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
